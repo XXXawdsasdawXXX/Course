@@ -1,9 +1,10 @@
 using System;
+using Data;
 using UnityEngine;
 
 namespace Level
 {
-    public sealed class LevelBackground : MonoBehaviour
+    public sealed class LevelBackground : Mono
     {
         private float startPositionY;
         private float endPositionY;

@@ -1,4 +1,4 @@
-﻿namespace Common.Pools
+﻿namespace Common
 {
     public interface IPoolable
     {

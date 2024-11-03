@@ -13,8 +13,6 @@ GameObject:
   - component: {fileID: 5568771391735819375}
   - component: {fileID: 659620479434099170}
   - component: {fileID: 102605417607457000}
-  - component: {fileID: 5474843056842851697}
-  - component: {fileID: 3047042153288618142}
   - component: {fileID: 5294560425948882908}
   m_Layer: 6
   m_Name: Enemy
@@ -164,35 +162,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e09a324f54d94d6e84681731f36566c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _physicsLayer: 2
   _healthParam: {fileID: 5294560425948882908}
-  _shoot: {fileID: 3047042153288618142}
-  _moveToPoint: {fileID: 5474843056842851697}
---- !u!114 &5474843056842851697
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 559606060570185700}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f01b1bcd5a94ef5a6b599b95dab4402, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _rigidbody: {fileID: 659620479434099170}
---- !u!114 &3047042153288618142
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 559606060570185700}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10b5fa04875b45faa88dc22d2d575875, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  _shoot:
+    _transform: {fileID: 3470145497817149085}
+  _moveToPoint:
+    _rigidbody: {fileID: 659620479434099170}
 --- !u!114 &5294560425948882908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -205,3 +179,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6fb820e45b24edb9ddacf5e6b8e2dd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _currentValue: 1
+  _maxValue: 1

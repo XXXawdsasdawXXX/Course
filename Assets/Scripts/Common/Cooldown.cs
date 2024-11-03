@@ -1,5 +1,5 @@
 ﻿using System;
-using Data.Value.RangeFloat;
+using Data.RangeFloat;
 using UnityEngine;
 
 namespace Common
@@ -16,7 +16,7 @@ namespace Common
             _current = isEmpty ? 0 : _ranged.GetRandomValue();
         }
         
-        public void Run(Action onEnd)
+        public void Run(Action onCompleted)
         {
             _current -= Time.deltaTime;
            
@@ -24,7 +24,7 @@ namespace Common
             {
                 _current = _ranged.GetRandomValue();
                 
-                onEnd?.Invoke();
+                onCompleted?.Invoke();
             }
         }
 

@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Data;
-using Services;
+using Service;
 using UnityEngine;
 
-namespace Common.Pools
+namespace Common
 {
     [Serializable]
     public class Pool<TEntity> where TEntity : Mono, IPoolable
@@ -63,7 +63,7 @@ namespace Common.Pools
 
         protected virtual TEntity AddNewEntity()
         {
-            TEntity entity = GameScene.InstantiateMono(this, _prefab, _root);
+            TEntity entity = GameScene.InstantiateMono<Pool<TEntity>, TEntity>(_prefab, _root);
             
             _all.Add(entity);
             

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Data.Value.RangeFloat
+namespace Data.RangeFloat
 {
 	public class MinMaxRangeFloatAttribute : Attribute
 	{
@@ -9,7 +9,7 @@ namespace Data.Value.RangeFloat
 			Min = min;
 			Max = max;
 		}
-		public float Min { get; private set; }
-		public float Max { get; private set; }
+		public float Min { get; }
+		public float Max { get; }
 	}
 }

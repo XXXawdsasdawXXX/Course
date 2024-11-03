@@ -371,22 +371,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxEnemyCount: 6
   _data:
+    _moveSpeed: 125
+    _maxHealth: 3
     _attackCooldownRange:
       MinValue: 2.2020102
       MaxValue: 5
-    _shoot:
-      _damage: 1
-      _bulletSpeed: 0.75
-      _bulletColor: {r: 1, g: 0.46929452, b: 0.36470592, a: 1}
-      _physicsLayer: 2
-      _offset: {x: 0, y: -0.59}
-    _moveSpeed: 125
-    _maxHealth: 3
+    _shootData:
+      _shootOffset: {x: 0, y: -0.25}
+      _bullet:
+        _damage: 1
+        _speed: 5
+        _color: {r: 1, g: 0.48017636, b: 0.3301887, a: 1}
+        _physicsLayer: 2
   _pointService: {fileID: 7166351703523243261}
   _spawnCooldown:
     _ranged:
-      MinValue: 1.2462312
-      MaxValue: 3.3768845
+      MinValue: 0.6030151
+      MaxValue: 1.8492465
   _pool:
     _root: {fileID: 562298204}
     _prefab: {fileID: 102605417607457000, guid: 87fe189881a524806800482ac8eaaa83, type: 3}
@@ -770,17 +771,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c57ed31af8d94ec3b11df7e2b588d40f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pointService: {fileID: 7166351703523243261}
   _data:
     _shoot:
-      _damage: 1
-      _bulletSpeed: 4
-      _bulletColor: {r: 0.81804067, g: 0.9150943, b: 0.53524387, a: 1}
-      _physicsLayer: 1
-      _offset: {x: 0, y: 0.3}
+      _shootOffset: {x: 0, y: 0.4}
+      _bullet:
+        _damage: 1
+        _speed: 5
+        _color: {r: 0.7113358, g: 1, b: 0.6132076, a: 1}
+        _physicsLayer: 1
     _moveSpeed: 150
     _maxHealth: 5
   _playerPrefab: {fileID: 6799125967610205483, guid: 9699e7e809fd44b2bbf3d30c951ecbd2, type: 3}
+  _pointService: {fileID: 7166351703523243261}
   _bulletSpawner: {fileID: 363245577}
   _input: {fileID: 2033862279}
 --- !u!1 &2033862277
@@ -939,7 +941,7 @@ Transform:
   m_GameObject: {fileID: 4788406047096451828}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 7, y: 0, z: 0}
+  m_LocalPosition: {x: 7, y: 4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1017,7 +1019,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 229096086002100841}
-  - component: {fileID: 2572952653776768186}
   m_Layer: 0
   m_Name: <Bounds>
   m_TagString: Untagged
@@ -1025,22 +1026,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2572952653776768186
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2572952653776768185}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a40dacbeba84ba1b55163e9b048081b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  leftBorder: {fileID: 6563466540960878063}
-  rightBorder: {fileID: 1668159544493171190}
-  downBorder: {fileID: 3327143300152331510}
-  topBorder: {fileID: 1752465411210150465}
 --- !u!1 &3066462935130252019
 GameObject:
   m_ObjectHideFlags: 0
@@ -1350,7 +1335,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 20}
+  m_Size: {x: 1, y: 25}
   m_EdgeRadius: 0
 --- !u!114 &4852396043583267082
 MonoBehaviour:
@@ -1563,7 +1548,7 @@ Transform:
   m_GameObject: {fileID: 6802158126964480329}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -7, y: 0, z: 0}
+  m_LocalPosition: {x: -7, y: 4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1645,7 +1630,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 20}
+  m_Size: {x: 1, y: 25}
   m_EdgeRadius: 0
 --- !u!4 &7143208560141865592
 Transform:

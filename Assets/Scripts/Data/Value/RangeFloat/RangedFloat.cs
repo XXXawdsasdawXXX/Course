@@ -1,7 +1,7 @@
 ﻿using System;
 using Random = UnityEngine.Random;
 
-namespace Data.Value.RangeFloat
+namespace Data.RangeFloat
 {
 	[Serializable]
 	public struct RangedFloat

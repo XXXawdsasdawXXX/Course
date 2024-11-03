@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace Data.Value.RangeFloat.Editor
+namespace Data.RangeFloat.Editor
 {
 	[CustomPropertyDrawer(typeof(RangedFloat), true)]
 	public class RangedFloatDrawer : PropertyDrawer {
