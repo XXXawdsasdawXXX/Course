@@ -22,7 +22,7 @@ namespace Level
             endPositionY = m_params.m_endPositionY;
             movingSpeedY = m_params.m_movingSpeedY;
             myTransform = transform;
-            var position = myTransform.position;
+            Vector3 position = myTransform.position;
             positionX = position.x;
             positionZ = position.z;
         }
