@@ -17,7 +17,7 @@ namespace Inventories
 
         public int Width => _width;
         public int Height => _height;
-        public int Count => _count;
+        public int Count => _cells?.Count ?? 0;
 
         private readonly int _width;
         private readonly int _height;
@@ -25,7 +25,6 @@ namespace Inventories
         private readonly Item[,] _items;
         private readonly Dictionary<Item, InventoryCell> _cells;
 
-        private int _count;
 
         public Inventory(in int width, in int height)
         {
@@ -154,6 +153,11 @@ namespace Inventories
                 return false;
             }
 
+            if (!_isCorrectSize(item.Size))
+            {
+                throw new ArgumentException();
+            }
+
             bool isCan = true;
 
             for (int y = posY; y < posY + item.Size.y; y++)
@@ -186,8 +190,6 @@ namespace Inventories
 
             _setItemMatrixValue(position, item.Size, item);
 
-            _count++;
-
             OnAdded?.Invoke(item, position);
 
             return true;
@@ -208,8 +210,6 @@ namespace Inventories
 
             _setItemMatrixValue(position, item.Size, item);
 
-            _count++;
-
             OnAdded?.Invoke(item, position);
 
             return true;
@@ -219,19 +219,85 @@ namespace Inventories
         /// Checks for adding an item on a free position
         /// </summary>
         public bool CanAddItem(in Item item)
-            => throw new NotImplementedException();
+        {
+            if (item == null || _cells.ContainsKey(item))
+            {
+                return false;
+            }
+
+            if (!_isCorrectSize(item.Size))
+            {
+                throw new ArgumentException();
+            }
+
+            return FindFreePosition(item.Size, out Vector2Int position);
+        }
 
         /// <summary>
         /// Adds an item on a free position
         /// </summary>
         public bool AddItem(in Item item)
-            => throw new NotImplementedException();
+        {
+            if (item == null || _cells.ContainsKey(item))
+            {
+                return false;
+            }
+
+            if (FindFreePosition(item.Size, out Vector2Int position))
+            {
+                AddItem(item, position);
+                return true;
+            }
+
+            return false;
+        }
 
         /// <summary>
         /// Returns a free position for a specified item
         /// </summary>
         public bool FindFreePosition(in Vector2Int size, out Vector2Int freePosition)
-            => throw new NotImplementedException();
+        {
+            if (!_isCorrectSize(size))
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
+            for (int y = 0; y <= _height - size.y; y++)
+            {
+                for (int x = 0; x <= _width - size.x; x++)
+                {
+                    if (_isFreeArea(x, y, size))
+                    {
+                        freePosition = new Vector2Int(x, y);
+                        return true;
+                    }
+                }
+            }
+
+            freePosition = Vector2Int.zero;
+            return false;
+        }
+
+        private bool _isCorrectSize(Vector2Int value)
+        {
+            return value.x > 0 && value.y > 0 && value.x <= _width && value.y <= _height;
+        }
+
+        private bool _isFreeArea(int startPositionX, int startPositionY, Vector2Int size)
+        {
+            for (int y = startPositionY; y < startPositionY + size.y; y++)
+            {
+                for (int x = startPositionX; x < startPositionX + size.x; x++)
+                {
+                    if (_items[x, y] != null)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
 
         /// <summary>
         /// Checks if a specified item exists
@@ -242,7 +308,7 @@ namespace Inventories
             {
                 return false;
             }
-            
+
             return _cells.ContainsKey(item);
         }
 
@@ -276,10 +342,34 @@ namespace Inventories
         /// Removes a specified item if exists
         /// </summary>
         public bool RemoveItem(in Item item)
-            => throw new NotImplementedException();
+        {
+            return RemoveItem(item, out Vector2Int position);
+        }
 
         public bool RemoveItem(in Item item, out Vector2Int position)
-            => throw new NotImplementedException();
+        {
+            position = Vector2Int.zero;
+          
+            if (item == null || !_cells.ContainsKey(item))
+            {
+                return false;
+            }
+
+            Vector2Int[] positions = _cells[item].Bounds.GetAllPositions();
+
+            position = positions[0];
+            
+            foreach (Vector2Int pos in positions)
+            {
+                _items[pos.x, pos.y] = null;
+            }
+
+            _cells.Remove(item);
+            
+            OnRemoved?.Invoke(item, position);
+            
+            return true;
+        }
 
         /// <summary>
         /// Returns an item at specified position 
@@ -307,7 +397,7 @@ namespace Inventories
         public bool TryGetItem(in Vector2Int position, out Item item)
         {
             item = null;
-            
+
             if (_isInsideBounds(position.x, position.y))
             {
                 item = _items[position.x, position.y];
@@ -319,7 +409,7 @@ namespace Inventories
         public bool TryGetItem(in int x, in int y, out Item item)
         {
             item = null;
-            
+
             if (_isInsideBounds(x, y))
             {
                 item = _items[x, y];
@@ -337,10 +427,10 @@ namespace Inventories
             {
                 throw new NullReferenceException();
             }
-            
+
             if (_cells.TryGetValue(item, out InventoryCell cell))
             {
-                return cell.Bounds.GetPositions();
+                return cell.Bounds.GetAllPositions();
             }
 
             throw new KeyNotFoundException();
@@ -355,7 +445,7 @@ namespace Inventories
         public void Clear()
         {
             _cells.Clear();
-           
+
             for (int y = 0; y < _height; y++)
             {
                 for (int x = 0; x < _width; x++)
@@ -364,8 +454,6 @@ namespace Inventories
                 }
             }
 
-            _count = 0;
-            
             OnCleared?.Invoke();
         }
 
@@ -373,7 +461,19 @@ namespace Inventories
         /// Returns a count of items with a specified name
         /// </summary>
         public int GetItemCount(string name)
-            => throw new NotImplementedException();
+        {
+            int count = 0;
+          
+            foreach ((Item item, InventoryCell cell) in _cells)
+            {
+                if (item.Name == name)
+                {
+                    count++;
+                }
+            }
+
+            return count;
+        }
 
         /// <summary>
         /// Moves a specified item to a target position if it exists

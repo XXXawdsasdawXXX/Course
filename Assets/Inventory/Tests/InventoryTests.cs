@@ -500,6 +500,7 @@ namespace Inventories
             ).Returns(false).SetName("Item size is bigger than inventory");
         }
 
+     
         [TestCase(0, 0)]
         [TestCase(-1, 10)]
         [TestCase(10, -2)]
@@ -516,6 +517,7 @@ namespace Inventories
                 inventory.FindFreePosition(new Vector2Int(width, height), out _));
         }
 
+    
         [TestCaseSource(nameof(CanAddOnFreePositionCases))]
         public bool CanAddOnFreePosition(Inventory inventory, Item item)
         {
@@ -557,6 +559,7 @@ namespace Inventories
             ).Returns(false).SetName("Item is null");
         }
 
+      
         [TestCase(0, 0)]
         [TestCase(-1, 10)]
         [TestCase(10, -2)]
@@ -573,6 +576,8 @@ namespace Inventories
             Assert.Catch<ArgumentException>(() => inventory.CanAddItem(item));
         }
 
+        
+    
         [TestCase(0, 0)]
         [TestCase(-1, 10)]
         [TestCase(10, -2)]
@@ -589,6 +594,8 @@ namespace Inventories
             Assert.Catch<ArgumentException>(() => inventory.CanAddItem(item, Vector2Int.zero));
         }
 
+        
+    
         [TestCaseSource(nameof(AddOnFreePositionSuccessfulCases))]
         public void AddOnFreePositionSuccessful(
             Inventory inventory,
@@ -707,6 +714,7 @@ namespace Inventories
             ).SetName("Item is null");
         }
 
+   
         [TestCase(0, 0)]
         [TestCase(-1, 10)]
         [TestCase(10, -2)]
@@ -778,6 +786,7 @@ namespace Inventories
             ).SetName("Item is absent!");
         }
 
+
         [TestCaseSource(nameof(RemoveSuccessfulCases))]
         public void RemoveSuccessful(
             Inventory inventory,
@@ -848,6 +857,7 @@ namespace Inventories
                 new Vector2Int(1, 2)
             ).SetName("Case 2");
         }
+
 
         [TestCaseSource(nameof(GetCases))]
         public Item Get(Inventory inventory, Vector2Int position)
@@ -955,6 +965,7 @@ namespace Inventories
             Assert.IsFalse(success);
             Assert.IsNull(actualItem);
         }
+        
 
         [TestCaseSource(nameof(GetPositionsCases))]
         public Vector2Int[] GetPositions(Inventory inventory, Item item)
@@ -1101,6 +1112,7 @@ namespace Inventories
             return inventory.GetItemCount(name);
         }
 
+        //todo last 
         private static IEnumerable<TestCaseData> GetCountCases()
         {
             var item1 = new Item("X", 1, 1);
