@@ -25,15 +25,17 @@ namespace Inventories
             if (_positions == null)
             {
                 _positions = new Vector2Int[_size.x * _size.y];
-              
+
                 int index = 0;
-                
-                for (int y = 0; y < _size.y; y++)
+
+
+                for (int x = 0; x < _size.x; x++)
                 {
-                    for (int x = 0; x < _size.x; x++)
+                    for (int y = 0; y < _size.y; y++)
                     {
                         _positions[index] = _minPosition + new Vector2Int(x, y);
-                      
+
+                        Debug.Log(_positions[index]);
                         index++;
                     }
                 }
@@ -41,6 +43,5 @@ namespace Inventories
 
             return _positions;
         }
-        
     }
 }
