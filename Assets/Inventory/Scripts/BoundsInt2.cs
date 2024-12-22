@@ -6,7 +6,6 @@ namespace Inventories
     public struct BoundsInt2
     {
         private readonly Vector2Int _minPosition;
-        private Vector2Int _maxPosition;
         private Vector2Int _size;
         private Vector2Int[] _positions;
 
@@ -15,7 +14,6 @@ namespace Inventories
         {
             _minPosition = position;
             _size = size;
-            _maxPosition = new Vector2Int(position.x + size.x, position.y + size.y);
             _positions = null;
         }
 
@@ -27,8 +25,7 @@ namespace Inventories
                 _positions = new Vector2Int[_size.x * _size.y];
 
                 int index = 0;
-
-
+                
                 for (int x = 0; x < _size.x; x++)
                 {
                     for (int y = 0; y < _size.y; y++)
