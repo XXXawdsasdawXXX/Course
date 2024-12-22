@@ -283,6 +283,27 @@ namespace Inventories
             return value.x > 0 && value.y > 0 && value.x <= _width && value.y <= _height;
         }
 
+        private bool _isCorrectPosition(Vector2Int position)
+        {
+            return position.x > 0 && position.y > 0 && position.x < _width && position.y < _height;
+        }
+
+        private bool _isFreeOrIntersects(Vector2Int position, Item item)
+        {
+            for (int y = position.y; y < position.y + item.Size.y; y++)
+            {
+                for (int x = position.x; x < position.x + item.Size.x; x++)
+                {
+                    if (_items[x, y] != null && !_items[x, y].Equals(item))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
         private bool _isFreeArea(int startPositionX, int startPositionY, Vector2Int size)
         {
             for (int y = startPositionY; y < startPositionY + size.y; y++)
@@ -349,7 +370,7 @@ namespace Inventories
         public bool RemoveItem(in Item item, out Vector2Int position)
         {
             position = Vector2Int.zero;
-          
+
             if (item == null || !_cells.ContainsKey(item))
             {
                 return false;
@@ -358,16 +379,16 @@ namespace Inventories
             Vector2Int[] positions = _cells[item].Bounds.GetAllPositions();
 
             position = positions[0];
-            
+
             foreach (Vector2Int pos in positions)
             {
                 _items[pos.x, pos.y] = null;
             }
 
             _cells.Remove(item);
-            
+
             OnRemoved?.Invoke(item, position);
-            
+
             return true;
         }
 
@@ -388,10 +409,17 @@ namespace Inventories
         {
             if (_isInsideBounds(x, y))
             {
-                return _items[x, y];
+                Item item = _items[x, y];
+
+                if (item == null)
+                {
+                    throw new NullReferenceException();
+                }
+
+                return item;
             }
 
-            return null;
+            throw new IndexOutOfRangeException();
         }
 
         public bool TryGetItem(in Vector2Int position, out Item item)
@@ -444,6 +472,11 @@ namespace Inventories
         /// </summary>
         public void Clear()
         {
+            if (_cells.Count == 0)
+            {
+                return;
+            }
+
             _cells.Clear();
 
             for (int y = 0; y < _height; y++)
@@ -463,7 +496,7 @@ namespace Inventories
         public int GetItemCount(string name)
         {
             int count = 0;
-          
+
             foreach ((Item item, InventoryCell cell) in _cells)
             {
                 if (item.Name == name)
@@ -479,20 +512,88 @@ namespace Inventories
         /// Moves a specified item to a target position if it exists
         /// </summary>
         public bool MoveItem(in Item item, in Vector2Int newPosition)
-            => throw new NotImplementedException();
+        {
+            if (!_isCorrectPosition(newPosition + item.Size))
+            {
+                return false;
+            }
+
+            if (item == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            if (_cells.ContainsKey(item) && _isFreeOrIntersects(newPosition, item))
+            {
+                Vector2Int[] oldPositions = _cells[item].Bounds.GetAllPositions();
+
+                foreach (Vector2Int position in oldPositions)
+                {
+                    _items[position.x, position.y] = null;
+                }
+
+                _cells[item].Move(newPosition, item.Size);
+
+                Vector2Int[] currentPositions = _cells[item].Bounds.GetAllPositions();
+
+                foreach (Vector2Int position in currentPositions)
+                {
+                    _items[position.x, position.y] = item;
+                }
+
+                OnMoved?.Invoke(item, newPosition);
+
+                return true;
+            }
+
+            return false;
+        }
 
         /// <summary>
         /// Reorganizes inventory space to make the free area uniform
         /// </summary>
         public void ReorganizeSpace()
-            => throw new NotImplementedException();
+        {
+            Item[] sortedItems = _cells.Keys.OrderByDescending(item => item.Size.x * item.Size.y).ToArray();
+
+            _cells.Clear();
+
+            for (int y = 0; y < _height; y++)
+            {
+                for (int x = 0; x < _width; x++)
+                {
+                    _items[x, y] = null;
+                }
+            }
+
+            foreach (Item item in sortedItems)
+            {
+                FindFreePosition(item.Size, out Vector2Int position);
+                
+                _cells.Add(item, new InventoryCell(position, item.Size));
+
+                for (int y = position.y; y < position.y + item.Size.y; y++)
+                {
+                    for (int x = position.x; x < position.x + item.Size.x; x++)
+                    {
+                        _items[x, y] = item;
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// Copies inventory items to a specified matrix
         /// </summary>
         public void CopyTo(in Item[,] matrix)
         {
-            Array.Copy(_items, matrix, _items.Length);
+            for (int y = 0; y < _height; y++)
+            {
+                for (int x = 0; x < _width; x++)
+                {
+                    matrix[x, y] = _items[x, y];
+                }
+            }
         }
 
         public IEnumerator<Item> GetEnumerator()

@@ -35,7 +35,6 @@ namespace Inventories
                     {
                         _positions[index] = _minPosition + new Vector2Int(x, y);
 
-                        Debug.Log(_positions[index]);
                         index++;
                     }
                 }

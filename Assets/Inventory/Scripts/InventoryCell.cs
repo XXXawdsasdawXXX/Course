@@ -5,7 +5,7 @@ namespace Inventories
 {
     public struct InventoryCell
     {
-        public BoundsInt2 Bounds { get; }
+        public BoundsInt2 Bounds { get; private set; }
 
         private int _count;
         
@@ -21,6 +21,16 @@ namespace Inventories
         {
             Bounds = new BoundsInt2(position, size);
             _count = 1;
+        }
+
+        public void Move(int x, int y, Vector2Int size)
+        {
+            Bounds = new BoundsInt2(new Vector2Int(x, y), size);
+        }
+        
+        public void Move(Vector2Int position, Vector2Int size)
+        {
+            Bounds = new BoundsInt2(position, size);
         }
         
         public void AddCount(int count)
