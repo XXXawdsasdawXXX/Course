@@ -465,7 +465,17 @@ namespace Inventories
         }
 
         public bool TryGetPositions(in Item item, out Vector2Int[] positions)
-            => throw new NotImplementedException();
+        {
+            if (item == null || !_cells.ContainsKey(item))
+            {
+                positions = null;
+                return false;
+            }
+
+            positions = _cells[item].Bounds.GetAllPositions();
+            return true;
+        }
+        
 
         /// <summary>
         /// Clears all inventory items
@@ -513,14 +523,14 @@ namespace Inventories
         /// </summary>
         public bool MoveItem(in Item item, in Vector2Int newPosition)
         {
-            if (!_isCorrectPosition(newPosition + item.Size))
-            {
-                return false;
-            }
-
             if (item == null)
             {
                 throw new ArgumentNullException();
+            }
+            
+            if (!_isCorrectPosition(newPosition + item.Size))
+            {
+                return false;
             }
 
             if (_cells.ContainsKey(item) && _isFreeOrIntersects(newPosition, item))
