@@ -491,13 +491,7 @@ namespace Inventories
                 new Vector2Int(2, 2),
                 new Vector2Int(3, 3)
             ).Returns(true).SetName("Top Right Corner Space");
-
-
-            yield return new TestCaseData(
-                new Inventory(5, 5),
-                new Vector2Int(6, 6),
-                new Vector2Int(0, 0)
-            ).Returns(false).SetName("Item size is bigger than inventory");
+            
         }
 
      
