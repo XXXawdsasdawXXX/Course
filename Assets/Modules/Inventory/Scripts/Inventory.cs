@@ -24,8 +24,7 @@ namespace Inventories
 
         private readonly Item[,] _items;
         private readonly Dictionary<Item, InventoryCell> _cells;
-
-
+        
         public Inventory(in int width, in int height)
         {
             if (width <= 0 || height <= 0)

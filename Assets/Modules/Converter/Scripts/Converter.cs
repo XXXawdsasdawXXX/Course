@@ -1,4 +1,4 @@
-namespace Homework
+namespace Modules.Converter
 {
     /**
        Конвертер представляет собой преобразователь ресурсов, который берет ресурсы
